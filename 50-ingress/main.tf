@@ -4,7 +4,7 @@ module "ingress" {
   vpc_id                     = data.aws_ssm_parameter.vpc_id.value
   subnets                    = split(",", data.aws_ssm_parameter.public_subnet_id.value)
   create_security_group      = false
-  security_groups            = [data.aws_ssm_parameter.albsg.value]
+  security_groups            = [data.aws_ssm_parameter.ingress.value]
   internal                   = false
   enable_deletion_protection = false
 
