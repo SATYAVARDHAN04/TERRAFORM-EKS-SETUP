@@ -1,0 +1,154 @@
+- name: ROBOSHOP SECURITY GROUPS AND RULES
+
+  security_groups:
+    - DB:
+        - mongodb_sg
+        - redis_sg
+        - mysql_sg
+        - rabbitmq_sg
+
+    - BACKEND:
+        - catalogue_sg
+        - cart_sg
+        - user_sg
+        - shipping_sg
+        - payment_sg
+
+    - LOAD_BALANCER:
+        - backend_alb
+        - frontend_alb
+
+    - PUBLIC_ACCESS:
+        - bastion
+        - vpn_sg
+
+    - FRONTEND:
+        - frontend_sg
+
+
+  bastion:
+    - name: bastion_rule
+      purpose: bastion should accept SSH traffic on port 22 from internet
+
+
+  vpn_sg:
+    - name: vpn_ssh
+      purpose: vpn should accept ssh traffic on port 22 from internet
+    - name: vpn_https
+      purpose: vpn should accept https traffic on port 443 from internet
+    - name: vpn_openvpn
+      purpose: vpn should accept openvpn tunnel traffic on port 1194 from internet
+    - name: vpn_admin
+      purpose: vpn should accept openvpn admin traffic on port 943 from internet
+
+
+  backend_alb:
+    - name: vpn-to-alb
+      purpose: backend alb should accept http traffic on port 80 from vpn
+    - name: bastion-to-alb
+      purpose: backend alb should accept http traffic on port 80 from bastion
+    - name: frontend-to-backend-alb
+      purpose: backend alb should accept http traffic on port 80 from frontend
+    - name: internet-to-alb
+      purpose: temporary rule allowing internet access to backend alb on port 80 for debugging
+
+
+  frontend_alb:
+    - name: http-to-frontendalb
+      purpose: frontend alb should accept http traffic on port 80 from internet
+    - name: https-to-frontendalb
+      purpose: frontend alb should accept https traffic on port 443 from internet
+
+
+  mongodb_sg:
+    - name: vpn-to-mongodb
+      purpose: mongodb should accept traffic on ports 22 and 27017 from vpn
+    - name: bastion-to-mongodb
+      purpose: mongodb should accept traffic on ports 22 and 27017 from bastion
+    - name: catalogue-to-mongodb
+      purpose: mongodb should accept traffic on port 27017 from catalogue
+    - name: user-to-mongodb
+      purpose: mongodb should accept traffic on port 27017 from user
+
+
+  mysql_sg:
+    - name: vpn-to-mysql
+      purpose: mysql should accept traffic on ports 22 and 3306 from vpn
+    - name: bastion-to-mysql
+      purpose: mysql should accept traffic on ports 22 and 3306 from bastion
+    - name: shipping-to-mysql
+      purpose: mysql should accept traffic on port 3306 from shipping
+
+
+  redis_sg:
+    - name: vpn-to-redis
+      purpose: redis should accept traffic on ports 22 and 6379 from vpn
+    - name: bastion-to-redis
+      purpose: redis should accept traffic on ports 22 and 6379 from bastion
+    - name: user-to-redis
+      purpose: redis should accept traffic on port 6379 from user
+    - name: cart-to-redis
+      purpose: redis should accept traffic on port 6379 from cart
+
+
+  rabbitmq_sg:
+    - name: vpn-to-rabbitmq
+      purpose: rabbitmq should accept traffic on ports 22 and 5672 from vpn
+    - name: bastion-to-rabbitmq
+      purpose: rabbitmq should accept traffic on ports 22 and 5672 from bastion
+    - name: payment-to-rabbitmq
+      purpose: rabbitmq should accept traffic on port 5672 from payment
+
+
+  catalogue_sg:
+    - name: vpn-to-catalogue
+      purpose: catalogue should accept traffic on ports 22 and 8080 from vpn
+    - name: bastion-to-catalogue
+      purpose: catalogue should accept traffic on ports 22 and 8080 from bastion
+    - name: backend-alb-to-catalogue
+      purpose: catalogue should accept traffic on port 8080 from backend alb
+
+
+  cart_sg:
+    - name: vpn-to-cart
+      purpose: cart should accept traffic on ports 22 and 8080 from vpn
+    - name: bastion-to-cart
+      purpose: cart should accept traffic on ports 22 and 8080 from bastion
+    - name: backend-alb-to-cart
+      purpose: cart should accept traffic on port 8080 from backend alb
+
+
+  user_sg:
+    - name: vpn-to-user
+      purpose: user should accept traffic on ports 22 and 8080 from vpn
+    - name: bastion-to-user
+      purpose: user should accept traffic on ports 22 and 8080 from bastion
+    - name: backend-alb-to-user
+      purpose: user should accept traffic on port 8080 from backend alb
+
+
+  shipping_sg:
+    - name: vpn-to-shipping
+      purpose: shipping should accept traffic on ports 22 and 8080 from vpn
+    - name: bastion-to-shipping
+      purpose: shipping should accept traffic on ports 22 and 8080 from bastion
+    - name: backend-alb-to-shipping
+      purpose: shipping should accept traffic on port 8080 from backend alb
+
+
+  payment_sg:
+    - name: vpn-to-payment
+      purpose: payment should accept traffic on ports 22 and 8080 from vpn
+    - name: bastion-to-payment
+      purpose: payment should accept traffic on ports 22 and 8080 from bastion
+    - name: backend-alb-to-payment
+      purpose: payment should accept traffic on port 8080 from backend alb
+
+
+  frontend_sg:
+    - name: vpn-to-frontend
+      purpose: frontend should accept traffic on ports 22 and 80 from vpn
+    - name: bastion-to-frontend
+      purpose: frontend should accept traffic on ports 22 and 80 from bastion
+    - name: frontend-alb-to-frontend
+      purpose: frontend should accept traffic on port 80 from frontend alb
