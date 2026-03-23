@@ -1,5 +1,5 @@
 resource "aws_acm_certificate" "satyology" {
-  domain_name               = "satyology.site"
+  domain_name               = "*.satyology.site"
   subject_alternative_names = ["*.satyology.site"]
   validation_method         = "DNS"
   lifecycle {
