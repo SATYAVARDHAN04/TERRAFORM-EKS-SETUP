@@ -8,7 +8,7 @@ terraform {
 
   backend "s3" {
     bucket = "satya2911dev"
-    key    = "roboshop-frontend-alb"
+    key    = "roboshop-ingress"
     region = "us-east-1"
     #dynamodb_table = "satyatable"
     encrypt      = true
