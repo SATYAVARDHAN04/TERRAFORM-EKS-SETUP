@@ -28,6 +28,7 @@ module "eks" {
   control_plane_subnet_ids = local.private_subnet_id
   create_node_security_group = false
   create_security_group = false
+  security_group_id=local.eks_control_plane
   node_security_group_id = local.nodes
 
   # EKS Managed Node Group(s)
@@ -36,8 +37,6 @@ module "eks" {
       # Starting on 1.30, AL2023 is the default AMI type for EKS managed node groups
       ami_type       = "AL2023_x86_64_STANDARD"
       instance_types = ["m5.xlarge"]
-      cluster_primary_security_group_id=local.eks_control_plane
-
       min_size     = 2
       max_size     = 10
       desired_size = 2
