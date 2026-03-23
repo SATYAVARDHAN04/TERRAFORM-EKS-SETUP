@@ -131,3 +131,12 @@ resource "aws_security_group_rule" "bastion-to-control_plane" {
   source_security_group_id = module.bastion.sg_id
   security_group_id = module.control_plane.sg_id
 }
+
+resource "aws_security_group_rule" "node-to-node" {
+  type              = "ingress"
+  from_port         = 0
+  to_port           = 0
+  protocol          = "-1"
+  cidr_blocks = [ "10.0.0.0/16" ]
+  security_group_id = module.nodes.sg_id
+}
